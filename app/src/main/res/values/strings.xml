@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">AassanJobs Test</string>
+    <string name="search">Search</string>
+    <string name="some_error_occurred">Some error occurred!</string>
+    <string name="no_cities_found">No cities found</string>
+</resources>
