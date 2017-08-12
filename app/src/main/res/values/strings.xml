@@ -3,4 +3,5 @@
     <string name="search">Search</string>
     <string name="some_error_occurred">Some error occurred!</string>
     <string name="no_cities_found">No cities found</string>
+    <string name="selection_is_city">Selection is - %s</string>
 </resources>

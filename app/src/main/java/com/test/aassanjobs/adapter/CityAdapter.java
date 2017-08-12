@@ -62,7 +62,7 @@ public class CityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.rootLayout)
         CardView rootLayout;
 
-        public CityHolder(View itemView) {
+        CityHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
@@ -70,7 +70,8 @@ public class CityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     City city = cityList.get(getAdapterPosition());
-                    CommonUtils.showToast(context, city.getName());
+                    String str = String.format(context.getString(R.string.selection_is_city), city.getName());
+                    CommonUtils.showToast(context, str);
                 }
             });
         }
