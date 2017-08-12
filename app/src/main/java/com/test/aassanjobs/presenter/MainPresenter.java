@@ -32,6 +32,19 @@ public class MainPresenter implements IDataInteractor {
         dbInteractor.getCityList(this);
     }
 
+    @Override
+    public void onDataResponse(List<City> cityList) {
+        this.cityList = cityList;
+        CommonUtils.showLog(getClass().getSimpleName(), "onDataResponse()\n" + cityList.toString());
+        iCityPresenter.onCityResponse(cityList);
+    }
+
+    @Override
+    public void onDataError(String message) {
+        CommonUtils.showLog(getClass().getSimpleName(), "onDataError()\n" + message);
+        iCityPresenter.onCityError(message);
+    }
+
     // Get filtered list
     public void filterCities(String query, ICityFilterPresenter cityFilterListener) {
         CommonUtils.showLog(getClass().getSimpleName(), "filterCities()\nQuery: " + query);
@@ -48,18 +61,5 @@ public class MainPresenter implements IDataInteractor {
             }
         }
         cityFilterListener.onCityFiltered(filteredCityList);
-    }
-
-    @Override
-    public void onDataResponse(List<City> cityList) {
-        this.cityList = cityList;
-        CommonUtils.showLog(getClass().getSimpleName(), "onDataResponse()\n" + cityList.toString());
-        iCityPresenter.onCityResponse(cityList);
-    }
-
-    @Override
-    public void onDataError(String message) {
-        CommonUtils.showLog(getClass().getSimpleName(), "onDataError()\n" + message);
-        iCityPresenter.onCityError(message);
     }
 }
