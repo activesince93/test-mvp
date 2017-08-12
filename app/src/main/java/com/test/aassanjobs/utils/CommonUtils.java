@@ -3,6 +3,7 @@ package com.test.aassanjobs.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -36,5 +37,9 @@ public class CommonUtils {
             }
         }
         return false;
+    }
+
+    public static void showLog(String tag, String message) {
+        Log.e(tag, message);
     }
 }

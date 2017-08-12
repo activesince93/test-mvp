@@ -2,19 +2,11 @@ package com.test.aassanjobs.presenter;
 
 import android.content.Context;
 
-import com.test.aassanjobs.database.DatabaseHandler;
-import com.test.aassanjobs.R;
-import com.test.aassanjobs.model.CitiesResponse;
 import com.test.aassanjobs.model.City;
-import com.test.aassanjobs.rest.ApiClient;
-import com.test.aassanjobs.rest.ApiInterface;
+import com.test.aassanjobs.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Darshan on 11-08-2017.
@@ -22,50 +14,27 @@ import retrofit2.Response;
  * @author Darshan Parikh (parikhdarshan36@gmail.com)
  */
 
-public class MainPresenter {
+public class MainPresenter implements IDataInteractor {
 
-    private Context context;
-    private DatabaseHandler databaseHandler;
     private List<City> cityList = new ArrayList<>();
-    private ApiInterface apiInterface;
+    private Context context;
+    private ICityPresenter iCityPresenter;
 
     public MainPresenter(Context context) {
         this.context = context;
-        this.databaseHandler = DatabaseHandler.getInstance(context);
-        this.apiInterface = ApiClient.getClient().create(ApiInterface.class);
     }
 
     // Get city list
-    public void provideCityList(CityListener cityListener) {
-        cityList = databaseHandler.getCityList();
-        if(cityList.size() > 0) {
-            cityListener.onCityResponse(cityList);
-        } else {
-            getCitiesFromServer(cityListener);
-        }
-    }
-
-    private void getCitiesFromServer(final CityListener cityListener) {
-        Call<CitiesResponse> citiesResponseCall = apiInterface.getCityList();
-        citiesResponseCall.enqueue(new Callback<CitiesResponse>() {
-            @Override
-            public void onResponse(Call<CitiesResponse> call, Response<CitiesResponse> response) {
-                cityList = response.body().getCityList();
-                cityListener.onCityResponse(cityList);
-
-                // Add cities in database
-                databaseHandler.addCities(cityList);
-            }
-
-            @Override
-            public void onFailure(Call<CitiesResponse> call, Throwable t) {
-                cityListener.onCityError(context.getString(R.string.some_error_occurred));
-            }
-        });
+    public void provideCityList(ICityPresenter cityListener) {
+        CommonUtils.showLog(getClass().getSimpleName(), "provideCityList()");
+        this.iCityPresenter = cityListener;
+        DBInteractor dbInteractor = new DBInteractor(context);
+        dbInteractor.getCityList(this);
     }
 
     // Get filtered list
-    public void filterCities(String query, CityFilterListener cityFilterListener) {
+    public void filterCities(String query, ICityFilterPresenter cityFilterListener) {
+        CommonUtils.showLog(getClass().getSimpleName(), "filterCities()\nQuery: " + query);
         if(query == null || query.equals("")) {
             cityFilterListener.onCityFiltered(cityList);
             return;
@@ -81,12 +50,16 @@ public class MainPresenter {
         cityFilterListener.onCityFiltered(filteredCityList);
     }
 
-    public interface CityListener {
-        void onCityResponse(List<City> cityList);
-        void onCityError(String message);
+    @Override
+    public void onDataResponse(List<City> cityList) {
+        this.cityList = cityList;
+        CommonUtils.showLog(getClass().getSimpleName(), "onDataResponse()\n" + cityList.toString());
+        iCityPresenter.onCityResponse(cityList);
     }
 
-    public interface CityFilterListener {
-        void onCityFiltered(List<City> cityList);
+    @Override
+    public void onDataError(String message) {
+        CommonUtils.showLog(getClass().getSimpleName(), "onDataError()\n" + message);
+        iCityPresenter.onCityError(message);
     }
 }

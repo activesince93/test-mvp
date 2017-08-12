@@ -41,4 +41,9 @@ public class City {
     public void setSlug(String slug) {
         this.slug = slug;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

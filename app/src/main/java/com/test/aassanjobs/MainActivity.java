@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.test.aassanjobs.adapter.CityAdapter;
 import com.test.aassanjobs.model.City;
+import com.test.aassanjobs.presenter.ICityFilterPresenter;
+import com.test.aassanjobs.presenter.ICityPresenter;
 import com.test.aassanjobs.presenter.MainPresenter;
 import com.test.aassanjobs.utils.CommonUtils;
 
@@ -27,7 +29,7 @@ import butterknife.ButterKnife;
  * @author Darshan Parikh (parikhdarshan36@gmail.com)
  */
 
-public class MainActivity extends AppCompatActivity implements MainPresenter.CityListener, MainPresenter.CityFilterListener {
+public class MainActivity extends AppCompatActivity implements ICityPresenter, ICityFilterPresenter {
 
     @BindView(R.id.edtTxtSearch)
     EditText edtTxtSearch;
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Cit
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                mainPresenter.filterCities(charSequence.toString(), (MainPresenter.CityFilterListener) context);
+                mainPresenter.filterCities(charSequence.toString(), (ICityFilterPresenter) context);
             }
 
             @Override
@@ -91,16 +93,19 @@ public class MainActivity extends AppCompatActivity implements MainPresenter.Cit
 
     @Override
     public void onCityResponse(List<City> cityList) {
+        CommonUtils.showLog(getClass().getSimpleName(), "onCityResponse()\n" + cityList.toString());
         setRecyclerViewAdapter(cityList);
     }
 
     @Override
     public void onCityError(String message) {
+        CommonUtils.showLog(getClass().getSimpleName(), "onCityError()");
         CommonUtils.showToast(context, getString(R.string.some_error_occurred));
     }
 
     @Override
     public void onCityFiltered(List<City> cityList) {
-        setRecyclerViewAdapter(cityList);
+        CommonUtils.showLog(getClass().getSimpleName(), "onCityFiltered()\n" + cityList.toString());
+        onCityResponse(cityList);
     }
 }
