@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements ICityPresenter, I
         edtTxtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -73,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements ICityPresenter, I
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
     }
