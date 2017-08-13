@@ -48,6 +48,11 @@ public class MainPresenter implements IDataInteractor {
             return;
         }
 
+        List<City> filteredCityList = filteredCities(query, cityList);
+        cityFilterListener.onCityFiltered(filteredCityList);
+    }
+
+    public List<City> filteredCities(String query, List<City> cityList) {
         List<City> filteredCityList = new ArrayList<>();
         for(City city : cityList) {
             if(city.getName().toLowerCase().contains(query.toLowerCase())
@@ -55,6 +60,6 @@ public class MainPresenter implements IDataInteractor {
                 filteredCityList.add(city);
             }
         }
-        cityFilterListener.onCityFiltered(filteredCityList);
+        return filteredCityList;
     }
 }
