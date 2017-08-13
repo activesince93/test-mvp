@@ -17,15 +17,10 @@ import java.util.List;
 public class MainPresenter implements IDataInteractor {
 
     private List<City> cityList = new ArrayList<>();
-    private Context context;
     private ICityPresenter iCityPresenter;
 
-    public MainPresenter(Context context) {
-        this.context = context;
-    }
-
     // Get city list
-    public void provideCityList(ICityPresenter cityListener) {
+    public void provideCityList(ICityPresenter cityListener, Context context) {
         CommonUtils.showLog(getClass().getSimpleName(), "provideCityList()");
         this.iCityPresenter = cityListener;
         DBInteractor dbInteractor = new DBInteractor(context);

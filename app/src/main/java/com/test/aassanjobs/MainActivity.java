@@ -50,11 +50,11 @@ public class MainActivity extends AppCompatActivity implements ICityPresenter, I
         ButterKnife.bind(this);
         context = this;
 
-        mainPresenter = new MainPresenter(context);
+        mainPresenter = new MainPresenter();
 
         initViews();
 
-        mainPresenter.provideCityList(this);
+        mainPresenter.provideCityList(this, context);
     }
 
     private void initViews() {
